@@ -1,4 +1,4 @@
-Tcapsoul is an ncurses client for netsoul protocol.
+Tcapsoul is an ncurses client for netsoul protocol writted by bellan_r
 You must have python2.6 or 2.7 to run it.
 
 INSTALL:
