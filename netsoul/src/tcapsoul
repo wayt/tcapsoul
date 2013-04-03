@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+####
+#### TCAPSOUL EST EN PLEINE MIGRATION DE SON API (TCAPSOULAPI)
+####
+####  POUR L'INSTANT LES AUTRES INTERFACE QUE CURSES NE FONCTIONNE PAS
+####
+#### ET CERTAINES CHOSES SONT DESACTIVE
+
+import window
+import sys
+import os
+import getpass
+import parser
+import EXTRA_COPYFILE
+
+#os.system("DEBUG/gpmmd")
+
+def     command_help(tcsconf):
+    print 'Tcapsoul USAGE :'
+    print '\t-help pour usage'
+    print '\t-update pour updater tcapsoul'
+    print '\t-copy pour copier un fichier'
+    print '\tsinon ./tcapsoul et c\'est parti!'
+    return (0)
+
+
+def     command_update(tcsconf):
+    if (getpass.getuser() != 'root' and len(sys.argv) == 2):
+        print 'Il faut etre root pour upgrade tcapsoul normalement sinon ./tcapsoul update --force'
+    print 'UPGRADE DE TCAPSOUL....'
+    print 'create file /tmp/tcapsoul/'
+    os.mkdir('/tmp/tcapsoul')
+    print 'enter to /tmp/tcapsoul'
+    os.chdir('/tmp/tcapsoul/')
+    print 'Download last version of tcapsoul'
+    os.system('wget http://perso.epitech.net/~bellan_r/tcapsoul.tar')
+    print 'Extract Tcapsoul Archive'
+    os.system('tar v -xf ./tcapsoul.tar')
+    os.system('make update')
+    os.chdir('/tmp/')
+    os.system('rm -rfv /tmp/tcapsoul*')
+    return (0)
+
+
+def     command_(tcsconf):
+    import window
+
+    window.INIT()
+    return (0)
+
+def     command_copy(tcsconf):
+    EXTRA_COPYFILE.ARGV = sys.argv[1:]
+    EXTRA_COPYFILE.start()
+
+class       InitConfig:
+
+    def     __init__(self):
+        self.VERSION = ''
+        self.name = ''
+        self.password = ''
+
+
+if (os.getppid() == 1):
+    print 'TCAPSOUL Started in daemon mode???'
+    print 'Tcapsoul not work in daemon mode...'
+    exit(0)
+
+basic = InitConfig()            
+h = []
+h.append(parser.command(command_, 0, ''))
+h.append(parser.command(command_copy, 0, 'copy'))
+h.append(parser.command(command_help, 0, 'help'))
+h.append(parser.command(command_update, 0, 'update'))
+p = parser.parser(h, basic)
+p.parse()
